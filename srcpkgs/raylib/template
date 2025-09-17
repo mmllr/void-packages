@@ -1,0 +1,22 @@
+# Template file for 'raylib'
+pkgname=raylib
+version=5.5
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cmake
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+#hostmakedepends=""
+makedepends="glfw-devel libXrandr-devel"
+depends="glfw"
+short_desc="Simple and easy-to-use library to enjoy videogames programming"
+maintainer="Markus Müller <mmlr@gmx.net>"
+license="Zlib"
+homepage="https://www.raylib.com/"
+changelog="https://github.com/raysan5/raylib/raw/refs/heads/master/CHANGELOG"
+distfiles="https://github.com/raysan5/raylib/archive/refs/tags/${version}.tar.gz"
+checksum=@849117514c7fa91876939d58b6097a5433bb181e12482edd5db0e4d06376fe82
