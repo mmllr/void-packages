@@ -1,0 +1,22 @@
+# Template file for 'libresprite'
+pkgname=libresprite
+version=1.2
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cmake
+configure_args="-DWITH_DESKTOP_INTEGRATION=ON -DCLIP_TESTS=OFF"
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+hostmakedepends="pkg-config git"
+makedepends="libarchive-devel libpng-devel pixman-devel libcurl-devel SDL2_image-devel tinyxml2-devel zlib-devel SDL2-devel freetype-devel lua54-devel giflib-devel libjpeg-turbo-devel gtest-devel"
+depends="desktop-file-utils hicolor-icon-theme"
+short_desc="Animated sprite editor & pixel art tool -- GPL2 Aseprite fork"
+maintainer="Markus Müller <mmlr@gmx.net>"
+license="GPL-2.0-only"
+homepage="https://libresprite.github.io/"
+changelog="https://github.com/LibreSprite/LibreSprite/compare/v1.1...v${version}"
+distfiles="https://github.com/LibreSprite/LibreSprite/releases/download/v${version}/SOURCE.CODE.+.submodules.tar.gz"
+checksum=38a2387694df9d5725244622d1c2e6cae8aced06b19c19cfbeab96afb13523c0
