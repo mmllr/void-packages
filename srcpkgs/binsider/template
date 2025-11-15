@@ -1,0 +1,22 @@
+# Template file for 'binsider'
+pkgname=binsider
+version=0.2.1
+revision=1
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cargo
+#configure_args=""
+#make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+# hostmakedepends=""
+# makedepends=""
+# depends=""
+short_desc="Analyze ELF binaries like a boss"
+maintainer="Markus Müller <mmlr@gmx.net>"
+license="Apache-2.0, MIT"
+homepage="https://binsider.dev"
+changelog="https://raw.githubusercontent.com/orhun/binsider/refs/heads/main/CHANGELOG.md"
+distfiles="https://github.com/orhun/binsider/archive/refs/tags/v${version}.tar.gz"
+checksum=a3bc10379677b19656436924f478798f205b371bc703feab938c1b2512f39500
