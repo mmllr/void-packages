@@ -1,0 +1,13 @@
+#!/bin/sh
+exec 2>&1
+
+# Load config if present
+[ -r /etc/default/ollama ] && . /etc/default/ollama
+
+: ${OLLAMA_HOST:=127.0.0.1:11434}
+: ${OLLAMA_ARGS:=}
+
+export OLLAMA_HOST
+
+exec chpst -u ollama:ollama \
+	/usr/bin/ollama serve $OLLAMA_ARGS

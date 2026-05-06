@@ -1,0 +1,7 @@
+# Ollama configuration
+
+# Address to bind (default: localhost only)
+OLLAMA_HOST=127.0.0.1:11434
+
+# Additional arguments (optional)
+OLLAMA_ARGS=""
