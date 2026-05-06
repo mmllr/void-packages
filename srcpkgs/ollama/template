@@ -1,0 +1,72 @@
+# Template file for 'ollama'
+pkgname=ollama
+version=0.23.0
+revision=1
+archs="x86_64 aarch64"
+depends="ca-certificates"
+short_desc="Run large language models locally"
+maintainer="Markus Mueller <mmlr@gmx.net>"
+license="MIT"
+hostmakedepends="tar zstd"
+homepage="https://ollama.com"
+changelog="https://github.com/ollama/ollama/releases"
+noextract="*"
+nocross=yes
+nostrip=yes
+noverifyrdeps=yes
+
+case "$XBPS_TARGET_MACHINE" in
+	x86_64) _arch=amd64 ;;
+	aarch64) _arch=arm64 ;;
+	*) return 1 ;;
+esac
+
+distfiles="
+ https://ollama.com/download/ollama-linux-${_arch}.tar.zst
+ https://ollama.com/download/ollama-linux-${_arch}-rocm.tar.zst
+"
+
+checksum="
+1079dad63e0e0f2d3279280ce6d8a93f3af53e79afb14f74813e0b35d9b96d54
+22162b75483b7115ee171cf24424ded24727934b6799928d96b243e2b108139b
+"
+
+do_extract() {
+    mkdir -p src rocm
+
+    tar --zstd -xf ${XBPS_SRCDISTDIR}/${pkgname}-${version}/ollama-linux-${_arch}.tar.zst -C src
+    tar --zstd -xf ${XBPS_SRCDISTDIR}/${pkgname}-${version}/ollama-linux-${_arch}-rocm.tar.zst -C rocm
+}
+
+do_install() {
+
+    # Binary
+    vbin src/bin/ollama
+
+    # Libraries (shared runtime deps)
+    vmkdir usr/lib/ollama
+    cp -r src/lib/* ${DESTDIR}/usr/lib/ollama/
+
+    # Install GPU libs into variant dirs
+    vmkdir usr/lib/ollama/rocm
+    vmkdir usr/lib/ollama/cuda
+
+    cp -r rocm/lib/* ${DESTDIR}/usr/lib/ollama/rocm/
+
+    # State directory
+    vmkdir var/lib/ollama
+    vlicense ${wrksrc}/LICENSE 2>/dev/null || true
+
+    # Runit service
+    vmkdir etc/sv/ollama
+
+    # tmpfiles
+    vmkdir usr/lib/tmpfiles.d
+    vinstall ${FILESDIR}/ollama.conf 0644 usr/lib/tmpfiles.d/
+
+    vinstall ${FILESDIR}/ollama.default 0644 etc/default/ollama
+}
+
+post_install() {
+	vsv ollama
+}

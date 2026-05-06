@@ -1,0 +1,12 @@
+case "$ACTION" in
+post)
+    if ! getent passwd ollama >/dev/null; then
+        useradd -r -U -M -d /var/lib/ollama -s /bin/false \
+            -c "Ollama service user" ollama
+    fi
+
+    if  getent group video >/dev/null 2>&1; then
+        usermod -a -G video ollama
+    fi
+    ;;
+esac
