@@ -1,0 +1,26 @@
+# Template file for 'llama-cpp'
+pkgname=llama-cpp
+version=0.4.0
+revision=2
+#archs="i686 x86_64"
+#build_wrksrc=
+build_style=cmake
+configure_args="-DGGML_VULKAN=1"
+# make_build_args=""
+#make_install_args=""
+#conf_files=""
+#make_dirs="/var/log/dir 0755 root root"
+# hostmakedepends=""
+makedepends="vulkan-loader vulkan-loader-devel Vulkan-Headers SPIRV-Headers shaderc openssl-devel openssl"
+# depends=""
+short_desc="LLM inference in C/C++"
+maintainer="Markus Müller <mmlr@gmx.net>"
+license="MIT"
+homepage="https://github.com/ggml-org/llama.cpp"
+#changelog=""
+distfiles="https://github.com/ggml-org/llama.cpp/archive/refs/tags/v${version}.tar.gz"
+checksum=9c2948aa9c79c92dd0e4c98e11ff5cf76dfdcaebdeb18e3e93409e9a98aefdab
+
+post_install() {
+	vlicense LICENSE
+}
