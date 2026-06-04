@@ -1,0 +1,20 @@
+# Template file for 'llmfit'
+pkgname=llmfit
+version=1.1.6
+revision=1
+#archs="i686 x86_64"
+build_style=cargo
+#configure_args=""
+make_build_args="-p llmfit"
+make_install_args="--path llmfit-tui"
+short_desc="One command to find what models runs on your hardware"
+maintainer="Markus Müller <mmlr@gmx.net>"
+license="MIT"
+homepage="https://www.llmfit.org/"
+changelog="https://raw.githubusercontent.com/AlexsJones/llmfit/refs/heads/main/CHANGELOG.md"
+distfiles="https://github.com/AlexsJones/llmfit/archive/refs/tags/v${version}.tar.gz"
+checksum=20464f17882ea45ac4b52708a87da83eadeec4ac31a065807d14b6716078d246
+
+post_install() {
+	vlicense LICENSE
+}
