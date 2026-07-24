@@ -1,0 +1,32 @@
+# Template file for 'lemonade'
+pkgname=lemonade
+version=11.7.0
+revision=1
+build_style=cmake
+hostmakedepends="pkg-config git"
+makedepends="libcurl-devel zlib-devel libdrm-devel libcap-devel libwebsockets-devel openssl-devel mbedtls-devel cli11 nodejs"
+short_desc="Run local AI apps by serving optimized LLMs right from their own GPUs"
+maintainer="Markus Müller <mmlr@gmx.net>"
+license="Apache-2.0"
+homepage="https://lemonade-server.ai"
+changelog="https://github.com/lemonade-sdk/lemonade/releases"
+conf_files="/etc/lemonade/conf.d/zz-secrets.conf"
+distfiles="https://github.com/lemonade-sdk/lemonade/archive/refs/tags/v${version}.tar.gz"
+checksum=395d688ba870afa5e71d3af4a6c3de9873632d2c2686663de7accc6435b6cbad
+system_accounts="_lemonade"
+_lemonade_homedir="/var/lib/lemonade"
+_lemonade_shell="/usr/bin/nologin"
+_lemonade_groups="socklog,video"
+make_dirs="
+ /var/lib/lemonade 0750 _lemonade _lemonade
+ /etc/lemonade/conf.d 0755 root root
+"
+
+do_install() {
+	DESTDIR="${DESTDIR}" cmake --install build
+
+	vman docs/man/man1/lemonade.1
+	vman docs/man/man1/lemond.1
+	vinstall /dev/null 644 etc/lemonade/conf.d README
+	vsv lemond
+}
