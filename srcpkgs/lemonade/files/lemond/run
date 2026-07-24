@@ -1,0 +1,16 @@
+#!/bin/sh
+
+install -d -o _lemonade -g _lemonade -m 0700 /run/lemonade
+
+export HOME=/var/lib/lemonade
+export XDG_RUNTIME_DIR=/run/lemonade
+export RUNTIME_DIRECTORY=/run/lemonade
+
+cd /var/lib/lemonade || exit 1
+
+for f in /etc/lemonade/conf.d/*.conf; do
+	[ -r "$f" ] && . "$f"
+done
+
+exec 2>&1
+exec chpst -u _lemonade:_lemonade /usr/bin/lemond
