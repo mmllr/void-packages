@@ -1,0 +1,2 @@
+site="https://github.com/lemonade-sdk/lemonade/tags.atom"
+pattern='<title>v\K[0-9.]+'
