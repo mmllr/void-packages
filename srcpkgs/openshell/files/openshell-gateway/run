@@ -1,0 +1,33 @@
+#!/bin/sh
+# OpenShell Gateway runit service
+#
+# Runs as _openshell user via chpst with environment isolation.
+
+export HOME="/var/lib/openshell"
+export XDG_DATA_HOME="$HOME/.local/share"
+export RUNTIME_DIRECTORY="openshell-gateway"
+
+cd "$HOME" || exit 1
+
+# Source optional overrides
+[ -r conf ] && . ./conf
+
+# Generate TLS certificates on first start
+TLS_DIR="$HOME/tls"
+if [ ! -f "$TLS_DIR/ca.crt" ]; then
+    install -d -m 0750 -o _openshell -g _openshell "$TLS_DIR"
+    chpst -u _openshell:_openshell \
+        /usr/bin/openshell-gateway generate-certs \
+        --output-dir "$TLS_DIR" \
+        --server-san host.openshell.internal \
+        --server-san localhost \
+        --server-san 127.0.0.1
+fi
+
+# Seed default config if not present
+if [ ! -f /etc/openshell/gateway.toml ]; then
+    cp /usr/share/examples/openshell-gateway/gateway.toml /etc/openshell/gateway.toml
+fi
+
+exec 2>&1
+exec chpst -u _openshell:_openshell /usr/bin/openshell-gateway ${OPTS:-}

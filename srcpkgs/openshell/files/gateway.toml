@@ -1,0 +1,15 @@
+# OpenShell gateway configuration for Void Linux
+# Installed to /etc/openshell/gateway.toml on first start.
+# Edit to customize. See man openshell-gateway(8).
+
+[openshell]
+version = 1
+
+[openshell.gateway]
+# Bind to all interfaces for Podman sandbox bridge connectivity.
+# Use 127.0.0.1:17670 for loopback-only access.
+bind_address = "0.0.0.0:17670"
+
+# Compute drivers (auto-detect order: kubernetes, podman, docker).
+# Uncomment to pin to a specific driver:
+# compute_drivers = ["podman"]

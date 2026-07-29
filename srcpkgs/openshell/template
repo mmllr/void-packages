@@ -1,0 +1,86 @@
+# Template file for 'openshell'
+pkgname=openshell
+version=0.0.92
+revision=1
+archs="x86_64"
+build_style=cargo
+build_helper="python3"
+hostmakedepends="pkg-config pandoc protobuf python3-packaging-bootstrap"
+makedepends="rust clang libclang sqlite-devel openssl-devel z3-devel"
+short_desc="Safe, sandboxed runtimes for autonomous AI agents"
+maintainer="Markus Müller <mmlr@gmx.net>"
+license="Apache-2.0"
+homepage="https://github.com/NVIDIA/OpenShell"
+distfiles="https://github.com/NVIDIA/OpenShell/archive/refs/tags/v${version}.tar.gz"
+checksum=dd9c179e7a44e3165cf96e2a16ed36801c4f0c23da6ed4ce5e776bc22ef91ba8
+
+subpackages="openshell-gateway python3-openshell"
+system_accounts="_openshell"
+_openshell_homedir="/var/lib/openshell"
+
+post_extract() {
+	if grep -q 'version = "0.0.0"' Cargo.toml; then
+		vsed -i Cargo.toml -e "s/^version = \"0.0.0\"/version = \"${version}\"/"
+	fi
+}
+
+do_build() {
+	cargo build --release \
+		--no-default-features \
+		--bin openshell \
+		--bin openshell-gateway
+}
+
+do_install() {
+	vbin target/release/openshell
+	vbin target/release/openshell-gateway
+
+	pandoc -s -t man deploy/man/openshell.1.md -o openshell.1
+	vman openshell.1
+
+	pandoc -s -t man deploy/man/openshell-gateway.8.md -o openshell-gateway.8
+	vman openshell-gateway.8
+
+	vdoc README.md
+
+	# Python SDK — installed to sitelib, moved by subpackage
+	vmkdir ${py3_sitelib}/openshell
+	vmkdir ${py3_sitelib}/openshell/_proto
+	vinstall python/openshell/__init__.py 644 ${py3_sitelib}/openshell/
+	vinstall python/openshell/sandbox.py 644 ${py3_sitelib}/openshell/
+	vinstall python/openshell/py.typed 644 ${py3_sitelib}/openshell/
+	vinstall python/openshell/_proto/__init__.py 644 ${py3_sitelib}/openshell/_proto/
+}
+
+post_install() {
+	make_dirs=(
+		"/var/lib/openshell 0750 _openshell _openshell"
+		"/etc/openshell 0755 root root"
+	)
+}
+
+openshell-gateway_package() {
+	pkgname=openshell-gateway
+	short_desc="${sourcepkg} gateway server"
+	depends="${sourcepkg}>=${version}_${revision}"
+
+	pkg_install() {
+		vmove usr/bin/openshell-gateway
+		vmove usr/share/man/man8/openshell-gateway.8*
+
+		vsconf ${FILESDIR}/gateway.toml
+		vsv openshell-gateway
+	}
+}
+
+python3-openshell_package() {
+	pkgname=python3-openshell
+	short_desc="${sourcepkg} Python SDK"
+	depends="${sourcepkg}>=${version}_${revision} \
+	         python3-grpcio python3-protobuf python3-httpx"
+	modules=yes
+
+	pkg_install() {
+		vmove ${py3_sitelib}/openshell
+	}
+}

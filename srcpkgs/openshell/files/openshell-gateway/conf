@@ -1,0 +1,4 @@
+# Default options for openshell-gateway
+# Edit this file to change gateway startup flags.
+# Example: OPTS="--log-level debug --port 18080"
+OPTS=
