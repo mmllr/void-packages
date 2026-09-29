@@ -1,0 +1,13 @@
+# Template file for 'whosthere'
+pkgname=whosthere
+version=0.9.0
+revision=1
+build_style=go
+go_import_path="github.com/ramonvermeulen/whosthere"
+short_desc="Local Area Network discovery tool"
+maintainer="Markus Müller <mmlr@gmx.net>"
+license="Apache-2.0"
+homepage="https://github.com/ramonvermeulen/whosthere"
+changelog="https://github.com/ramonvermeulen/whosthere/releases"
+distfiles="https://github.com/ramonvermeulen/whosthere/archive/refs/tags/v${version}.tar.gz"
+checksum=6d7cc7691999a461535492ceee18bb7cfc1ad04d563123fb838de41712e85fb6
